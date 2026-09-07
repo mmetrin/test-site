@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-export function useRevealOnVisible({ threshold = 0.24, rootMargin = '0px 0px -10% 0px' } = {}) {
+export function useRevealOnVisible({ threshold = 0.24, rootMargin = '0px 0px -10% 0px', once = true } = {}) {
   const elementRef = useRef(null)
   const [isVisible, setIsVisible] = useState(false)
 
@@ -18,12 +18,15 @@ export function useRevealOnVisible({ threshold = 0.24, rootMargin = '0px 0px -10
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (!entry.isIntersecting) {
+        if (once && !entry.isIntersecting) {
           return
         }
 
-        setIsVisible(true)
-        observer.disconnect()
+        setIsVisible(entry.isIntersecting)
+
+        if (once && entry.isIntersecting) {
+          observer.disconnect()
+        }
       },
       { threshold, rootMargin },
     )
@@ -31,7 +34,7 @@ export function useRevealOnVisible({ threshold = 0.24, rootMargin = '0px 0px -10
     observer.observe(element)
 
     return () => observer.disconnect()
-  }, [rootMargin, threshold])
+  }, [once, rootMargin, threshold])
 
   return { elementRef, isVisible }
 }

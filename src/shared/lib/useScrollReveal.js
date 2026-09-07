@@ -1,6 +1,9 @@
 import { useEffect } from 'react'
 
-export function useScrollReveal(selector = '.scroll-reveal') {
+export function useScrollReveal(
+  selector = '.scroll-reveal',
+  { threshold = 0.14, rootMargin = '0px 0px -8% 0px' } = {},
+) {
   useEffect(() => {
     const scrollRevealItems = [...document.querySelectorAll(selector)]
 
@@ -20,11 +23,11 @@ export function useScrollReveal(selector = '.scroll-reveal') {
           observer.unobserve(entry.target)
         })
       },
-      { threshold: 0.14, rootMargin: '0px 0px -8% 0px' },
+      { threshold, rootMargin },
     )
 
     scrollRevealItems.forEach((item) => observer.observe(item))
 
     return () => observer.disconnect()
-  }, [selector])
+  }, [rootMargin, selector, threshold])
 }

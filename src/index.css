@@ -25,6 +25,14 @@
 @font-face {
   font-family: 'MTS Wide';
   font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../MTSWide — копия/MTSWide-Regular.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'MTS Wide';
+  font-style: normal;
   font-weight: 500;
   font-display: swap;
   src: url('./assets/fonts/MTSWide-Medium.otf') format('opentype');
@@ -41,7 +49,7 @@
 :root {
   font-family: 'MTS Text', Arial, sans-serif;
   color: #ffffff;
-  background: #000814;
+  background: #00060f;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -65,7 +73,7 @@ html {
 
 body {
   overflow-x: hidden;
-  background: #000814;
+  background: #00060f;
 }
 
 #root {

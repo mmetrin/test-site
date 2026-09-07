@@ -20,7 +20,7 @@ export function PremiumSliderSection() {
       aria-label="MTS Ads Premium Video: слайды"
     >
       <div className="slider-section__header scroll-reveal">
-        <h2>MTS ADS Premium Video</h2>
+        <h2>МТС ADS Premium Video</h2>
       </div>
       <div
         className={`slider-section__viewport${isDragging ? ' is-dragging' : ''}`}

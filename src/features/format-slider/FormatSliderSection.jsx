@@ -253,7 +253,7 @@ export function FormatSliderSection() {
         <div className="format-slider-section__layout">
           <div className="format-slider-section__header">
             <h1 className="format-slider-section__title">
-              {typographText('Ваша реклама с MTS ADS — больше, чем обычный видеоролик')}
+              {typographText('Ваша реклама с МТС ADS — больше, чем обычный видеоролик')}
             </h1>
             <a className="premium-video-button format-slider-section__button" href="#lead-form">
               Подобрать формат
