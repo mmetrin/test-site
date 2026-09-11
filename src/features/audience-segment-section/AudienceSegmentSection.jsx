@@ -20,7 +20,7 @@ export function AudienceSegmentTabs({ activeSegment, onChange }) {
   )
 }
 
-export function AudienceSegmentSection({ activeSegment: controlledSegment, onSegmentChange, hideTabs = false }) {
+export function AudienceSegmentSection({ activeSegment: controlledSegment, funnelTransition = 'idle', onSegmentChange, hideTabs = false }) {
   const [internalSegment, setInternalSegment] = useState(audienceSegments[0].value)
   const activeSegment = controlledSegment ?? internalSegment
   const handleSegmentChange = onSegmentChange ?? setInternalSegment
@@ -29,6 +29,9 @@ export function AudienceSegmentSection({ activeSegment: controlledSegment, onSeg
     rootMargin: '0px 0px -8% 0px',
     once: true,
   })
+  const isFunnelPreviewVisible = funnelTransition === 'preview'
+  const isFunnelComplete = funnelTransition === 'complete'
+  const isContentVisible = isFunnelComplete || (!isFunnelPreviewVisible && isDataContentVisible)
 
   return (
     <section className="audience-segment-section" aria-label="Аудитории MTS Ads">
@@ -36,7 +39,7 @@ export function AudienceSegmentSection({ activeSegment: controlledSegment, onSeg
 
       <div className="audience-segment-section__data" aria-labelledby="audience-data-title">
         <h2
-          className={`audience-segment-section__data-title${isDataContentVisible ? ' audience-segment-section__data-title--visible' : ''}`}
+          className={`audience-segment-section__data-title${isContentVisible ? ' audience-segment-section__data-title--visible' : ''}`}
           id="audience-data-title"
         >
           <span>Анализируем больше данных —</span>
@@ -45,9 +48,9 @@ export function AudienceSegmentSection({ activeSegment: controlledSegment, onSeg
 
         <div
           ref={dataContentRef}
-          className={`audience-segment-section__content${isDataContentVisible ? ' audience-segment-section__content--visible' : ''}`}
+          className={`audience-segment-section__content${isContentVisible ? ' audience-segment-section__content--visible' : ''}`}
         >
-          <AudienceDataScene isVisible={isDataContentVisible} />
+          <AudienceDataScene isVisible={isContentVisible} />
           <p className="audience-segment-section__caption audience-segment-section__caption--mts audience-segment-section__reveal audience-segment-section__reveal--caption"><strong>Подберём точную аудиторию среди 65+ млн абонентов МТС</strong> на основе их интересов, интернет-поведения, звонков и гео-данных</p>
           <p className="audience-segment-section__caption audience-segment-section__caption--partners audience-segment-section__reveal audience-segment-section__reveal--right"><strong>Обогащаем выборку данными от партнёров</strong> — знаем детали о реальных покупках на товары вашей категории или бренд</p>
         </div>

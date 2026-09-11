@@ -66,6 +66,7 @@
   letter-spacing: var(--symbol-spacing);
   white-space: pre;
   opacity: 0;
+  filter: brightness(1.26) saturate(0.38);
 }
 
 .audience-segment-section__content--visible .audience-data-scene__channels {
@@ -99,7 +100,7 @@
   0% { transform: translateX(var(--flow-start-x)); opacity: 0; }
   28% { opacity: 0; }
   52% { opacity: 0.28; }
-  72% { opacity: 0.7; }
+  72% { opacity: 0.9; }
   100% { transform: translateX(-100%); opacity: 0; }
 }
 

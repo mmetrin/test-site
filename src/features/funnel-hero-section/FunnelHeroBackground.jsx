@@ -3,9 +3,11 @@ import heroVideo from '../../assets/funnel-journey/hero/hero-background.mp4'
 import backdropVideo from '../../assets/funnel-journey/hero/hero-background-backdrop.mp4'
 import heroPoster from '../../assets/funnel-journey/hero/hero-background-poster.jpg'
 import staticBackground from '../../../img-bg.jpg'
+import mobileHeroVideo from '../../../capcup.mp4'
 
 const motionQuery = '(prefers-reduced-motion: reduce)'
 const backdropQuery = '(min-width: 1921px) and (prefers-reduced-motion: no-preference)'
+const mobileQuery = '(max-width: 599px)'
 const subscribe = (query, callback) => {
   const media = window.matchMedia(query)
   media.addEventListener('change', callback)
@@ -13,14 +15,18 @@ const subscribe = (query, callback) => {
 }
 const subscribeMotion = (callback) => subscribe(motionQuery, callback)
 const subscribeBackdrop = (callback) => subscribe(backdropQuery, callback)
+const subscribeMobile = (callback) => subscribe(mobileQuery, callback)
 const getReducedMotion = () => window.matchMedia(motionQuery).matches
 const getBackdrop = () => window.matchMedia(backdropQuery).matches
+const getMobile = () => window.matchMedia(mobileQuery).matches
 const getServerMotion = () => true
 const getServerBackdrop = () => false
+const getServerMobile = () => false
 
 export function FunnelHeroBackground() {
   const reducedMotion = useSyncExternalStore(subscribeMotion, getReducedMotion, getServerMotion)
   const showBackdrop = useSyncExternalStore(subscribeBackdrop, getBackdrop, getServerBackdrop)
+  const isMobile = useSyncExternalStore(subscribeMobile, getMobile, getServerMobile)
   const mainVideoRef = useRef(null)
   const backdropVideoRef = useRef(null)
   const [isVideoActive, setIsVideoActive] = useState(false)
@@ -93,8 +99,8 @@ export function FunnelHeroBackground() {
           <img className="funnel-hero__background-video" src={heroPoster} alt="" />
           {!reducedMotion && (
             <video
-              className="funnel-hero__background-video"
-              src={heroVideo}
+              className={`funnel-hero__background-video${isMobile ? ' funnel-hero__background-video--mobile' : ''}`}
+              src={isMobile ? mobileHeroVideo : heroVideo}
               poster={heroPoster}
               autoPlay
               muted

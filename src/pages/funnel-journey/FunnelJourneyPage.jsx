@@ -11,6 +11,7 @@ import './FunnelJourneyPage.css'
 
 export function FunnelJourneyPage() {
   const [activeSegment, setActiveSegment] = useState('enterprise')
+  const [funnelTransition, setFunnelTransition] = useState('idle')
   usePageScrollRestoration()
   useScrollReveal('.funnel-journey-page__scroll-reveal', {
     threshold: 0.04,
@@ -21,8 +22,13 @@ export function FunnelJourneyPage() {
     <main className="funnel-journey-page">
       <FunnelHeroSection />
       <AudienceSegmentTabs activeSegment={activeSegment} onChange={setActiveSegment} />
-      <FunnelStageSection />
-      <AudienceSegmentSection activeSegment={activeSegment} onSegmentChange={setActiveSegment} hideTabs />
+      <FunnelStageSection onTransitionChange={setFunnelTransition} />
+      <AudienceSegmentSection
+        activeSegment={activeSegment}
+        funnelTransition={funnelTransition}
+        hideTabs
+        onSegmentChange={setActiveSegment}
+      />
       <section className="funnel-journey-page__feedback funnel-journey-page__scroll-reveal" aria-label="Форма обратной связи">
         <LightGlowCanvas />
         <img src={formImage} alt="Форма обратной связи" />

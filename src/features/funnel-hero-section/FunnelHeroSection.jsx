@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import './FunnelHeroSection.css'
 import { FunnelHeroVisual } from './FunnelHeroVisual'
 import { FunnelHeroBackground } from './FunnelHeroBackground'
@@ -14,9 +16,9 @@ const navigationItems = [
 ]
 
 const facts = [
-  { detail: 'от самого крупного оператора страны', text: 'активной аудитории', suffix: '+', unit: 'млн', value: '65' },
-  { detail: 'для формирования сегмента', text: 'параметров ЦА', value: '5 000' },
-  { detail: 'сегментов', text: 'уже готовых', suffix: '+', value: '350' },
+  { detail: 'от самого крупного оператора страны', mobileText: 'активной аудитории', text: 'активной аудитории', suffix: '+', unit: 'млн', value: '65' },
+  { detail: 'для формирования сегмента', mobileText: 'характеристик аудитории для точной сегментации', text: 'параметров ЦА', value: '5 000' },
+  { detail: 'сегментов', mobileText: 'уже готовых сегментов', text: 'уже готовых', suffix: '+', value: '350' },
 ]
 
 function HeaderLogo() {
@@ -29,17 +31,37 @@ function HeaderLogo() {
 
 export function FunnelHeroSection() {
   const isReady = usePageReady()
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  const closeMobileMenu = () => setIsMenuOpen(false)
 
   return (
     <section className={`funnel-hero${isReady ? ' funnel-hero--ready' : ''}`} id="top" aria-labelledby="funnel-hero-title">
       <FunnelHeroBackground />
+      <div className="funnel-hero__mobile-status-bar" aria-hidden="true">
+        <span className="funnel-hero__mobile-time">9:41</span>
+        <div className="funnel-hero__mobile-status-icons">
+          <span className="funnel-hero__mobile-signal" />
+          <span className="funnel-hero__mobile-wifi" />
+          <span className="funnel-hero__mobile-battery" />
+        </div>
+      </div>
+      <div className="funnel-hero__mobile-browser-bar" aria-hidden="true">
+        <span className="funnel-hero__mobile-browser-control">‹</span>
+        <div className="funnel-hero__mobile-address-bar">
+          <span>аА</span>
+          <span>ads.mts.ru</span>
+          <span>↻</span>
+        </div>
+        <span className="funnel-hero__mobile-browser-control">•••</span>
+      </div>
       <div className="funnel-hero__inner">
         <header className="funnel-hero__header">
           <HeaderLogo />
 
-          <nav className="funnel-hero__navigation" aria-label="Основная навигация">
+          <nav className={`funnel-hero__navigation${isMenuOpen ? ' funnel-hero__navigation--open' : ''}`} id="funnel-hero-navigation" aria-label="Основная навигация">
             {navigationItems.map((item) => (
-              <a className="funnel-hero__navigation-link" href="#top" key={item.label}>
+              <a className="funnel-hero__navigation-link" href="#top" key={item.label} onClick={closeMobileMenu}>
                 {item.label}
                 {item.hasChevron && <img src={chevronIcon} alt="" />}
               </a>
@@ -49,6 +71,17 @@ export function FunnelHeroSection() {
           <ActionButton className="funnel-hero__header-button" size="medium">
             Запустить рекламу
           </ActionButton>
+          <button
+            className="funnel-hero__menu-button"
+            type="button"
+            aria-controls="funnel-hero-navigation"
+            aria-expanded={isMenuOpen}
+            aria-label={isMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
+            onClick={() => setIsMenuOpen((isOpen) => !isOpen)}
+          >
+            <span />
+            <span />
+          </button>
         </header>
 
         <div className="funnel-hero__copy">
@@ -59,12 +92,16 @@ export function FunnelHeroSection() {
             <p>
               Крупнейшие компании уже растят бизнес с помощью инструментов <strong>MTS ADS</strong>
             </p>
+            <p className="funnel-hero__mobile-lead">
+              Более 5 000 компаний доверяют продвижение инструментам МТС ADS
+            </p>
           </div>
 
           <ActionButton className="funnel-hero__cta">Запустить рекламу с MTS ADS</ActionButton>
         </div>
 
         <FunnelHeroVisual />
+        <ActionButton className="funnel-hero__mobile-cta">Запустить рекламу с MTS ADS</ActionButton>
 
         <div className="funnel-hero__facts" aria-label="Преимущества MTS Ads">
           {facts.map((fact) => (
@@ -83,6 +120,7 @@ export function FunnelHeroSection() {
                   </>
                 )}
               </p>
+              <p className="funnel-hero__fact-mobile-text">{fact.mobileText}</p>
             </article>
           ))}
         </div>

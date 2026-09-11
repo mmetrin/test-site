@@ -47,8 +47,16 @@ const mainThreads = Array.from({ length: 32 }, (_, index) => {
     symbolAlpha: depth.opacity * density * 0.85,
     symbolSpacing: 1 + (index % 3) * 0.6,
     symbolDelay: (index % 7) * 0.35,
-    symbolColor: index % 9 === 2 || index % 11 === 5 ? '#369afe' : undefined,
+    symbolColor: index % 5 === 0 || index % 7 === 3
+      ? 'rgb(229 244 255 / 88%)'
+      : index % 9 === 2 || index % 11 === 5
+        ? '#369afe'
+        : undefined,
   }
+}).filter((thread, index) => {
+  const isCentralBand = index >= 11 && index <= 20
+
+  return !isCentralBand || index % 2 === 0
 })
 
 const ambientThreads = Array.from({ length: 18 }, (_, index) => {
@@ -96,6 +104,7 @@ const edgeThreads = [
   symbolSize: 10,
   symbolAlpha: thread.opacity * 0.85,
   symbolSpacing: 1.5,
+  symbolColor: index % 2 === 0 ? 'rgb(229 244 255 / 82%)' : undefined,
 }))
 
 // Separate short packets occupy the upper/lower right without extending every
@@ -162,11 +171,15 @@ const rightSymbolThreads = [
   symbolAlpha: 0.45 + (index % 2) * 0.12,
   symbolSpacing: 1.5,
   symbolDelay: (index % 5) * 0.35,
-  symbolColor: index % 3 === 0 || index % 4 === 1 ? '#369afe' : undefined,
+  symbolColor: index % 3 === 0
+    ? 'rgb(229 244 255 / 88%)'
+    : index % 4 === 1
+      ? '#369afe'
+      : undefined,
 }))
 
 const centerSymbolThreads = [
-  [92, 700], [145, 760], [198, 675], [252, 735], [306, 690],
+  [108, 700], [198, 675], [288, 710],
 ].map(([top, left], index) => ({
   id: `center-symbol-${index}`,
   left,
@@ -184,7 +197,7 @@ const centerSymbolThreads = [
   symbolAlpha: 0.72,
   symbolSpacing: 1.8,
   symbolDelay: 0.4 + (index % 3) * 0.25,
-  symbolColor: index % 2 === 0 ? '#369afe' : undefined,
+  symbolColor: 'rgb(229 244 255 / 82%)',
 }))
 
 // Sparse accents outside the bright central band.
@@ -196,12 +209,17 @@ const composedThreads = [...ambientThreads, ...edgeThreads, ...rightEdgeThreads,
 export const audienceDataThreads = [...composedThreads, ...rightSymbolThreads, ...centerSymbolThreads].map((thread, index) => {
   const lengthFactor = index % 4 === 1 ? 0.88 : 1
   const speedFactor = index % 5 === 2 ? 0.8 : index % 5 === 4 ? 0.9 : 1
+  const duration = thread.duration * lengthFactor * speedFactor
+  const symbolDuration = thread.symbolDuration * lengthFactor * speedFactor
+  // Start every glyph packet at a different point in its loop. A fixed offset
+  // keeps the whole field balanced instead of periodically bunching on the left.
+  const symbolDelay = -(2.4 + ((index * 1.618 + (thread.phase ?? 0)) % symbolDuration))
 
   return {
     ...thread,
     opacity: thread.opacity * (accentThreadIds.has(thread.id) ? 1.25 : 1),
     width: thread.width * lengthFactor,
-    duration: thread.duration * lengthFactor * speedFactor,
-    ...(thread.symbols ? { symbolDuration: thread.symbolDuration * lengthFactor * speedFactor } : {}),
+    duration,
+    ...(thread.symbols ? { symbolDuration, symbolDelay } : {}),
   }
 })

@@ -134,6 +134,10 @@ focal area stable while the 1920px stage clips the source at every viewport.
   transform: translateX(-50%) rotate(-174.71deg) scaleY(-1) scale(var(--hero-video-scale, 1));
 }
 
+.funnel-hero__background-video--mobile {
+  display: none;
+}
+
 /* Keep the ultrawide crop continuous so it does not jump at 2240px. */
 @media (min-width: 1921px) {
   .funnel-hero__background-video {
@@ -318,6 +322,16 @@ the content layer, which is rendered above the complete backdrop stack.
   flex: 0 0 auto;
 }
 
+.funnel-hero__menu-button {
+  display: none;
+}
+
+.funnel-hero__mobile-status-bar,
+.funnel-hero__mobile-browser-bar,
+.action-button.funnel-hero__mobile-cta {
+  display: none;
+}
+
 .funnel-hero__copy {
   position: absolute;
   z-index: 1;
@@ -362,6 +376,11 @@ the content layer, which is rendered above the complete backdrop stack.
   font-size: 17px;
   font-weight: 400;
   line-height: 24px;
+}
+
+.funnel-hero__mobile-lead,
+.funnel-hero__fact-mobile-text {
+  display: none;
 }
 
 .funnel-hero__cta {
@@ -485,7 +504,7 @@ the content layer, which is rendered above the complete backdrop stack.
   .funnel-hero__fact-value { font-size: 40px; }
 }
 
-@media (max-width: 840px) {
+@media (min-width: 600px) and (max-width: 840px) {
   .funnel-hero {
     height: auto;
     min-height: 780px;
@@ -527,6 +546,424 @@ the content layer, which is rendered above the complete backdrop stack.
   }
 }
 
+@media (max-width: 599px) {
+  .funnel-hero {
+    height: 820px;
+    min-height: 820px;
+    overflow: visible;
+  }
+
+  .funnel-hero__backdrop {
+    inset: 0;
+  }
+
+  .funnel-hero__backdrop::before {
+    height: 118px;
+    opacity: 0.76;
+  }
+
+  .funnel-hero__static-background {
+    width: 905px;
+    max-width: none;
+    height: 600px;
+    object-fit: cover;
+    object-position: 55% 38%;
+    transform: translateX(calc(50vw - 50%));
+    opacity: 0.84;
+  }
+
+  .funnel-hero__ambient,
+  .funnel-hero__left-edge-blur,
+  .funnel-hero__bottom-right-blur {
+    display: none;
+  }
+
+  .funnel-hero__video-frame {
+    display: block;
+    top: 0;
+    bottom: auto;
+    left: calc(50% - 80px);
+    width: 906px;
+    height: 600px;
+    margin: 0;
+    overflow: hidden;
+    transform: translateX(-50%);
+  }
+
+  .funnel-hero__video-align {
+    top: 0;
+    left: 0;
+    width: 906px;
+    height: 600px;
+  }
+
+  .funnel-hero__background-video {
+    top: 360px;
+    left: calc(50% + 36px);
+    width: 915px;
+    height: 682px;
+    filter: brightness(2) contrast(1.08) saturate(0.82);
+    transform: translate(-50%, -50%) rotate(8.59deg) scaleY(-1);
+  }
+
+  .funnel-hero__background-video:not(.funnel-hero__background-video--mobile) {
+    display: none;
+  }
+
+  .funnel-hero__background-video--mobile {
+    display: block;
+  }
+
+  .funnel-hero__background {
+    background: linear-gradient(to bottom, transparent 0 35%, rgb(0 6 15 / 28%) 62%, #00060f 86%);
+  }
+
+  .funnel-hero__inner {
+    width: 100%;
+    margin: 0;
+  }
+
+  .funnel-hero__header {
+    height: 52px;
+    margin-top: 44px;
+    padding: 9px 16px;
+    background: rgb(0 6 15 / 10%);
+    backdrop-filter: blur(2px);
+  }
+
+  .funnel-hero__logo,
+  .funnel-hero__logo img {
+    width: 88px;
+    height: 34px;
+  }
+
+  .funnel-hero__header-button {
+    display: none !important;
+  }
+
+  .funnel-hero__menu-button {
+    display: grid;
+    gap: 4px;
+    place-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    border-radius: 20px;
+    background: #000814;
+    cursor: pointer;
+  }
+
+  .funnel-hero__menu-button span {
+    display: block;
+    width: 12px;
+    height: 1.5px;
+    border-radius: 2px;
+    background: rgb(255 255 255 / 93%);
+    transition: transform 160ms ease;
+  }
+
+  .funnel-hero__menu-button[aria-expanded='true'] span:first-child {
+    transform: translateY(2.75px) rotate(45deg);
+  }
+
+  .funnel-hero__menu-button[aria-expanded='true'] span:last-child {
+    transform: translateY(-2.75px) rotate(-45deg);
+  }
+
+  .funnel-hero__navigation {
+    position: absolute;
+    top: 60px;
+    right: 16px;
+    z-index: 5;
+    display: grid;
+    gap: 2px;
+    width: 196px;
+    padding: 8px;
+    border: 1px solid rgb(255 255 255 / 12%);
+    border-radius: 20px;
+    background: rgb(0 8 20 / 88%);
+    box-shadow: 0 12px 28px rgb(0 0 0 / 28%);
+    backdrop-filter: blur(18px);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: opacity 160ms ease, transform 160ms ease;
+  }
+
+  .funnel-hero__navigation--open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .funnel-hero__navigation-link {
+    justify-content: flex-start;
+    padding: 10px 12px;
+    font-size: 15px;
+    line-height: 20px;
+  }
+
+  .funnel-hero__copy {
+    top: 100px;
+    left: 0;
+    width: 100%;
+    height: auto;
+    gap: 0;
+    padding: 0 16px;
+  }
+
+  .funnel-hero__copy h1 {
+    max-width: 382px;
+    font-size: 32px;
+    line-height: 36px;
+  }
+
+  .funnel-hero__copy > div > p:not(.funnel-hero__mobile-lead) {
+    display: none;
+  }
+
+  .funnel-hero__copy > div > .funnel-hero__mobile-lead {
+    display: block;
+    width: 100%;
+    max-width: 382px;
+    margin-top: 16px;
+    color: rgb(255 255 255 / 93%);
+    font-size: 12px;
+    line-height: 15.6px;
+  }
+
+  .funnel-hero__cta {
+    display: none !important;
+  }
+
+  .action-button.funnel-hero__mobile-cta {
+    position: fixed;
+    right: 16px;
+    bottom: 96px;
+    left: 16px;
+    z-index: 31;
+    display: inline-flex;
+    width: calc(100% - 32px);
+  }
+
+  .funnel-hero__mobile-status-bar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 44px;
+    padding: 0 18px 0 34px;
+    background: #000000;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .funnel-hero__mobile-status-icons {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .funnel-hero__mobile-signal {
+    width: 14px;
+    height: 10px;
+    background: linear-gradient(to top, #ffffff 0 18%, transparent 18% 28%, #ffffff 28% 52%, transparent 52% 62%, #ffffff 62% 100%);
+    clip-path: polygon(0 100%, 22% 72%, 44% 48%, 66% 26%, 88% 0, 100% 100%);
+  }
+
+  .funnel-hero__mobile-wifi {
+    width: 14px;
+    height: 10px;
+    border-top: 2px solid #ffffff;
+    border-radius: 50%;
+    position: relative;
+  }
+
+  .funnel-hero__mobile-wifi::before,
+  .funnel-hero__mobile-wifi::after {
+    position: absolute;
+    right: 50%;
+    bottom: 0;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    content: '';
+    background: #ffffff;
+    transform: translateX(50%);
+  }
+
+  .funnel-hero__mobile-wifi::after {
+    bottom: 5px;
+    width: 8px;
+    height: 4px;
+    border-top: 2px solid #ffffff;
+    border-radius: 50% 50% 0 0;
+    background: transparent;
+  }
+
+  .funnel-hero__mobile-battery {
+    position: relative;
+    width: 22px;
+    height: 10px;
+    border: 1px solid #ffffff;
+    border-radius: 3px;
+  }
+
+  .funnel-hero__mobile-battery::before {
+    position: absolute;
+    top: 2px;
+    right: -3px;
+    width: 2px;
+    height: 4px;
+    border-radius: 0 1px 1px 0;
+    content: '';
+    background: #ffffff;
+  }
+
+  .funnel-hero__mobile-battery::after {
+    position: absolute;
+    inset: 1px;
+    border-radius: 1px;
+    content: '';
+    background: #ffffff;
+  }
+
+  .funnel-hero__mobile-browser-bar {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 30;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    height: 76px;
+    padding: 0 32px 32px;
+    color: #333333;
+    font-family: Arial, sans-serif;
+  }
+
+  .funnel-hero__mobile-browser-control,
+  .funnel-hero__mobile-address-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 72%);
+    box-shadow: inset 0 1px rgb(255 255 255 / 64%);
+    backdrop-filter: blur(20px);
+  }
+
+  .funnel-hero__mobile-browser-control {
+    flex: 0 0 44px;
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  .funnel-hero__mobile-address-bar {
+    flex: 1;
+    justify-content: space-between;
+    padding: 0 16px;
+    font-size: 16px;
+  }
+
+  .funnel-hero-visual__logo--one {
+    top: 70px;
+    left: 28px;
+    width: 208px;
+    height: 48px;
+  }
+
+  .funnel-hero-visual__logo--two {
+    top: 24px;
+    left: 144px;
+    width: 190px;
+    height: 48px;
+  }
+
+  .funnel-hero-visual__logo--three {
+    top: 120px;
+    left: 166px;
+    width: 150px;
+    height: 44px;
+  }
+
+  .funnel-hero-visual__logo--four {
+    top: 76px;
+    left: 284px;
+    width: 82px;
+    height: 40px;
+  }
+
+  .funnel-hero__facts {
+    top: 478px;
+    right: 0;
+    left: 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 20px 32px;
+    width: auto;
+    margin: 0;
+    padding: 20px;
+    border-radius: 32px;
+    background: rgb(0 8 20 / 20%);
+    backdrop-filter: blur(5px);
+  }
+
+  .funnel-hero__fact,
+  .funnel-hero__fact:nth-child(2),
+  .funnel-hero__fact:nth-child(3) {
+    width: auto;
+  }
+
+  .funnel-hero__fact:nth-child(3) {
+    order: 2;
+  }
+
+  .funnel-hero__fact:nth-child(2) {
+    grid-column: 1 / -1;
+    order: 3;
+  }
+
+  .funnel-hero__fact-value {
+    gap: 9px;
+    font-size: 24px;
+    line-height: 28px;
+  }
+
+  .funnel-hero__fact-value span {
+    padding-bottom: 2px;
+    font-size: 18px;
+    line-height: 21px;
+  }
+
+  .funnel-hero__fact-text {
+    display: none;
+  }
+
+  .funnel-hero__fact-mobile-text {
+    display: block;
+    margin: 0;
+    color: rgb(255 255 255 / 93%);
+    font-family: 'MTS Wide', Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 15.6px;
+  }
+
+  .action-button--large {
+    min-height: 52px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .funnel-hero__header,
   .funnel-hero__copy,
@@ -545,6 +982,6 @@ the content layer, which is rendered above the complete backdrop stack.
   }
 
   .funnel-hero__facts {
-    gap: 32px;
+    gap: 20px 32px;
   }
 }

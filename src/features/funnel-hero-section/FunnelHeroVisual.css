@@ -118,3 +118,16 @@
     margin: 64px 0 0 auto;
   }
 }
+
+@media (max-width: 599px) {
+  .funnel-hero-visual {
+    position: absolute;
+    top: 224px;
+    left: calc(50% + 8px);
+    width: 430px;
+    height: 210px;
+    margin: 0;
+    transform: translateX(-50%);
+  }
+
+}

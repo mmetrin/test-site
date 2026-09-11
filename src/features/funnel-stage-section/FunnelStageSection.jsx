@@ -39,9 +39,10 @@ const contentSteps = [
   },
 ]
 
-export function FunnelStageSection() {
+export function FunnelStageSection({ onTransitionChange }) {
   const sectionRef = useRef(null)
   const sceneRef = useRef(null)
+  const transitionRef = useRef('idle')
   const { elementRef: revealRef, isVisible: isSceneVisible } = useRevealOnVisible({
     threshold: 0.12,
     rootMargin: '0px 0px -8% 0px',
@@ -49,6 +50,7 @@ export function FunnelStageSection() {
   const [activeStep, setActiveStep] = useState(0)
   const [displayedStep, setDisplayedStep] = useState(0)
   const [isContentLeaving, setIsContentLeaving] = useState(false)
+  const [isNextPreviewVisible, setIsNextPreviewVisible] = useState(false)
   const content = contentSteps[displayedStep]
 
   useEffect(() => {
@@ -78,12 +80,20 @@ export function FunnelStageSection() {
 
       const scrollDistance = section.offsetHeight - scene.offsetHeight
       const sceneTop = Math.max(0, (window.innerHeight - scene.offsetHeight) / 2)
+      const hasStickyScrollStarted = section.getBoundingClientRect().top <= sceneTop
       const progress = Math.min(
         1,
         Math.max(0, scrollDistance > 0 ? (sceneTop - section.getBoundingClientRect().top) / scrollDistance : 0),
       )
+      const nextTransition = progress >= 0.995 ? 'complete' : hasStickyScrollStarted ? 'preview' : 'idle'
 
       setActiveStep(Math.min(contentSteps.length - 1, Math.floor(progress * contentSteps.length)))
+      setIsNextPreviewVisible(nextTransition === 'preview')
+
+      if (transitionRef.current !== nextTransition) {
+        transitionRef.current = nextTransition
+        onTransitionChange?.(nextTransition)
+      }
     }
 
     updateStep()
@@ -95,7 +105,7 @@ export function FunnelStageSection() {
       window.removeEventListener('scroll', updateStep)
       window.removeEventListener('resize', updateStep)
     }
-  }, [])
+  }, [onTransitionChange])
 
   return (
     <section className="funnel-stage-section" ref={sectionRef} aria-labelledby="funnel-stage-title">
@@ -153,6 +163,11 @@ export function FunnelStageSection() {
               <span>Обсудить рекламную кампанию</span>
             </button>
           </div>
+        </div>
+
+        <div className={`funnel-stage-section__next-preview${isNextPreviewVisible ? ' is-visible' : ''}`} aria-hidden="true">
+          <span>Анализируем больше данных —</span>
+          <strong>точнее находим ваших клиентов</strong>
         </div>
       </div>
     </section>
