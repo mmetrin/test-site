@@ -76,10 +76,30 @@ body {
   background: #00060f;
 }
 
+/* Match the canvas to light pages so their entrance never exposes a dark flash. */
+:root[data-page-theme='light'],
+:root:has(.funnel-journey-page, .enterprise-hero-page, .cert-page, .contacts-page, .interactive-web-page, .cursor-grid-page, .bloggers-standalone),
+:root[data-page-theme='light'] body,
+body:has(.funnel-journey-page, .enterprise-hero-page, .cert-page, .contacts-page, .interactive-web-page, .cursor-grid-page, .bloggers-standalone) {
+  background: #f7fafd;
+}
+
 #root {
   display: flex;
   justify-content: center;
   min-width: 0;
+}
+
+/* Every entry point mounts into #root, including the standalone pages. */
+@media (prefers-reduced-motion: no-preference) {
+  #root > * {
+    animation: page-appear 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+
+@keyframes page-appear {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
 }
 
 button,

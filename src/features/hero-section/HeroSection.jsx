@@ -27,8 +27,8 @@ export function HeroSection() {
       <div className="page-container hero-section__content">
         <a
           className="hero-section__logo-link reveal-item"
-          href="/"
-          aria-label="Перезагрузить главную страницу"
+          href={`${import.meta.env.BASE_URL}enterprise-hero/`}
+          aria-label="МТС Ads — главная"
         >
           <img className="hero-section__logo" src={logo} alt="MTS Ads Premium Video" />
         </a>

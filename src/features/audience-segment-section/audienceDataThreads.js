@@ -40,7 +40,7 @@ const mainThreads = Array.from({ length: 32 }, (_, index) => {
     opacity: depth.opacity * density,
     duration: 8.5 + (index % 6) * 0.65 + depth.blur * 2,
     phase: ((index * 11) % 32) * 0.12,
-    color: ['112 155 210', '137 135 195', '110 170 189', '113 143 193'][index % 4],
+    color: ['128 179 255', '151 194 255', '103 161 247', '115 169 249'][index % 4],
     symbols: index % 2 === 0 ? symbolPatterns[index % symbolPatterns.length] : null,
     symbolDuration: 10 + (index % 7) * 0.65,
     symbolSize: 9 + (index % 3),
@@ -48,9 +48,9 @@ const mainThreads = Array.from({ length: 32 }, (_, index) => {
     symbolSpacing: 1 + (index % 3) * 0.6,
     symbolDelay: (index % 7) * 0.35,
     symbolColor: index % 5 === 0 || index % 7 === 3
-      ? 'rgb(229 244 255 / 88%)'
+      ? 'rgb(180 213 255 / 88%)'
       : index % 9 === 2 || index % 11 === 5
-        ? '#369afe'
+        ? '#80b3ff'
         : undefined,
   }
 }).filter((thread, index) => {
@@ -73,7 +73,7 @@ const ambientThreads = Array.from({ length: 18 }, (_, index) => {
     blur: 1.1 + (index % 3) * 0.25,
     duration: 12 + (index % 4) * 0.8,
     phase: ((index * 7) % 18) * 0.16,
-    color: ['112 155 210', '137 135 195', '110 170 189'][index % 3],
+    color: ['128 179 255', '151 194 255', '103 161 247'][index % 3],
     symbols: null,
   }
 })
@@ -98,13 +98,13 @@ const edgeThreads = [
   blur: 0.3 + (index % 2) * 0.2,
   duration: 10 + (index % 3) * 1.1,
   phase: ((index * 3) % 7) * 0.35,
-  color: '112 155 210',
+  color: '128 179 255',
   symbols: ['0101 · 001', '← · < <', '{ } · [ ]', '─ < < ·', '01 · 10', '< / > ·', '· < <'][index],
   symbolDuration: 10 + (index % 3) * 1.1,
   symbolSize: 10,
   symbolAlpha: thread.opacity * 0.85,
   symbolSpacing: 1.5,
-  symbolColor: index % 2 === 0 ? 'rgb(229 244 255 / 82%)' : undefined,
+  symbolColor: index % 2 === 0 ? 'rgb(180 213 255 / 82%)' : undefined,
 }))
 
 // Separate short packets occupy the upper/lower right without extending every
@@ -123,7 +123,7 @@ const rightEdgeThreads = [
   blur: 0.35 + (index % 2) * 0.2,
   duration: 10.5 + (index % 3) * 0.8,
   phase: 0.6 + index * 0.5,
-  color: '112 155 210',
+  color: '128 179 255',
   symbols: ['01 · 10', '← · <', '{ } ·', '─ < <', '001 · 01', '< / >'][index],
   symbolDuration: 10.5 + (index % 3) * 0.8,
   symbolSize: 10,
@@ -142,7 +142,7 @@ const largeSymbolThreads = [72, 119, 174, 226, 290].map((top, index) => ({
   blur: 0,
   duration: 12 + index * 0.5,
   phase: 1.4 + index * 1.1,
-  color: '112 155 210',
+  color: '128 179 255',
   gradient: true,
   symbols: ['01 · 10', '{ } · [ ]', '← < <', '001 · 01', '< / >'][index],
   symbolDuration: 12 + index * 0.5,
@@ -164,7 +164,7 @@ const rightSymbolThreads = [
   blur: 0.45,
   duration: index % 3 === 0 ? 6.8 : 10.5 + (index % 4) * 0.8,
   phase: 0.5 + index * 0.4,
-  color: '112 155 210',
+  color: '128 179 255',
   symbols: symbolPatterns[(index + 2) % symbolPatterns.length],
   symbolDuration: index % 3 === 0 ? 6.8 : 10.5 + (index % 4) * 0.8,
   symbolSize: 10,
@@ -172,9 +172,9 @@ const rightSymbolThreads = [
   symbolSpacing: 1.5,
   symbolDelay: (index % 5) * 0.35,
   symbolColor: index % 3 === 0
-    ? 'rgb(229 244 255 / 88%)'
+    ? 'rgb(180 213 255 / 88%)'
     : index % 4 === 1
-      ? '#369afe'
+      ? '#80b3ff'
       : undefined,
 }))
 
@@ -190,14 +190,14 @@ const centerSymbolThreads = [
   blur: 0.25,
   duration: 7.2 + (index % 3) * 0.7,
   phase: 0.8 + index * 0.45,
-  color: '112 155 210',
+  color: '128 179 255',
   symbols: symbolPatterns[(index + 4) % symbolPatterns.length],
   symbolDuration: 7.2 + (index % 3) * 0.7,
   symbolSize: 11,
   symbolAlpha: 0.72,
   symbolSpacing: 1.8,
   symbolDelay: 0.4 + (index % 3) * 0.25,
-  symbolColor: 'rgb(229 244 255 / 82%)',
+  symbolColor: 'rgb(180 213 255 / 82%)',
 }))
 
 // Sparse accents outside the bright central band.

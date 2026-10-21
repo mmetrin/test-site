@@ -7,15 +7,17 @@
   width: 1440px;
   height: 430px;
   mask-image: linear-gradient(to bottom, transparent 0, rgb(0 0 0 / 18%) 45px, #000 130px, #000 250px, rgb(0 0 0 / 30%) 345px, transparent 415px);
-  opacity: 0;
+  opacity: 1;
+  filter: saturate(1.4);
   pointer-events: none;
 }
 
 .audience-data-scene__thread {
   position: absolute;
-  opacity: 0;
+  opacity: 1;
   height: 30px;
   overflow: hidden;
+  contain: paint;
   transform-origin: 0 12px;
   filter: blur(var(--thread-blur));
   mask-image: linear-gradient(90deg, transparent 0, rgb(0 0 0 / 30%) 12px, rgb(0 0 0 / 70%) 32px, #000 65px, #000 calc(100% - 85px), transparent);
@@ -33,8 +35,8 @@
 }
 
 .audience-data-scene__thread::before {
-  clip-path: inset(0 0 0 100%);
-  background: linear-gradient(90deg, transparent, rgb(var(--thread-color) / 12%) 18%, rgb(var(--thread-color) / 32%) 58%, rgb(var(--thread-color) / 22%) 84%, transparent);
+  clip-path: none;
+  background: linear-gradient(90deg, transparent, rgb(var(--thread-color) / 18%) 18%, rgb(var(--thread-color) / 45%) 58%, rgb(var(--thread-color) / 32%) 84%, transparent);
 }
 
 .audience-data-scene__thread::after {
@@ -44,7 +46,7 @@
     rgb(var(--thread-color) / 12%) 12%,
     rgb(var(--thread-color) / 45%) 30%,
     rgb(var(--thread-color) / 85%) 48%,
-    rgb(203 222 239 / 90%) 57%,
+    rgb(128 179 255 / 90%) 57%,
     rgb(var(--thread-color) / 60%) 72%,
     transparent
   );
@@ -66,20 +68,7 @@
   letter-spacing: var(--symbol-spacing);
   white-space: pre;
   opacity: 0;
-  filter: brightness(1.26) saturate(0.38);
-}
-
-.audience-segment-section__content--visible .audience-data-scene__channels {
-  animation: audience-data-appear 1600ms ease var(--flow-start) forwards;
-}
-
-.audience-segment-section__content--visible .audience-data-scene__thread {
-  opacity: 1;
-  contain: paint;
-}
-
-.audience-segment-section__content--visible .audience-data-scene__thread::before {
-  clip-path: none;
+  filter: none;
 }
 
 .audience-segment-section__content--visible .audience-data-scene__thread::after {
@@ -118,7 +107,7 @@
 
 .audience-data-scene__symbols--gradient {
   color: transparent;
-  background: var(--data-artwork-gradient);
+  background: linear-gradient(90deg, #b4d5ff, #80b3ff);
   background-clip: text;
   -webkit-background-clip: text;
   line-height: 22px;

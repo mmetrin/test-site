@@ -13,7 +13,7 @@ export function AudienceDataChannels() {
             // Convert scene Y into the channel layer and align its 1px line.
             top: `calc(${thread.top}px - var(--channels-top) - var(--thread-line-y))`,
             width: `${thread.width}px`,
-            '--thread-opacity': thread.opacity,
+            '--thread-opacity': Math.min(1, thread.opacity * 1.4),
             '--thread-color': thread.color,
             '--thread-thickness': `${thread.thickness}px`,
             '--thread-blur': `${thread.blur}px`,

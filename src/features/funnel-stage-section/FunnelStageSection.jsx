@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 
-import funnelImage from '../../../sales-funnel.png'
-import interestCasesImage from '../../../интерес.png'
-import reachCasesImage from '../../../охваты.png'
-import salesCasesImage from '../../../продажи.png'
-import reactivationCasesImage from '../../../реактивация.png'
+import lightFunnelImage from '../../assets/figma/main-enterprises/sales-funnel.png'
+import updatedFunnelImage from '../../assets/enterprise-hero/sales-funnel-full.png'
+import updatedFunnelBackground from '../../assets/figma/main-enterprises/funnel-bg-2x.png'
 import { useRevealOnVisible } from '../../shared/lib/useRevealOnVisible'
+import designBackground from '../../assets/figma/enterprise-funnel/funnel-bg.svg'
+import { FunnelDesignArtwork } from './FunnelDesignArtwork'
+import { FunnelCaseCards } from './FunnelCaseCards'
 
 const stages = ['Охваты', 'Интерес', 'Продажи', 'Реактивация']
 
@@ -13,35 +14,32 @@ const defaultInstruments = ['Каскадная реклама', 'Telegram Ads',
 
 const contentSteps = [
   {
-    title: 'Увеличим знание о вас до 40 %',
+    title: 'Строим знание о бренде',
     description:
-      'Повышайте конверсию в обращение и увеличивайте количество запросов',
-    instruments: ['Каскадная реклама', 'Telegram Ads', 'Конструктор чат-ботов'],
-    casesImage: reachCasesImage,
+      'Повышайте узнаваемость, растите охваты и присутствие бренда',
+    instruments: ['Telegram Ads', 'Программатик-реклама', 'СМС- и ММС-рассылки', 'CPA-сеть'],
   },
   {
-    title: 'Ждем текст',
-    description: 'Повышайте конверсию в покупку и сокращайте время закрытия сделки',
+    title: 'Превратим внимание в спрос',
+    description: 'Повышайте конверсию в обращение и увеличивайте количество запросов',
     instruments: defaultInstruments,
-    casesImage: interestCasesImage,
   },
   {
-    title: 'Ждем текст',
-    description: 'Возвращайте клиентов, увеличивайте число повторных покупок и снижайте затраты на привлечение',
+    title: 'Доведём до решения о покупке',
+    description: 'Повышайте конверсию в покупку и сокращайте время закрытия сделки',
     instruments: defaultInstruments,
-    casesImage: salesCasesImage,
   },
   {
-    title: 'Увеличим знание о вас до 40%',
-    description: 'Повышайте узнаваемость, растите охваты и присутствие бренда',
+    title: 'Превратим покупку в привычку',
+    description: 'Возвращайте клиентов, увеличивайте число повторных покупок и снижайте затраты на привлечение',
     instruments: defaultInstruments,
-    casesImage: reactivationCasesImage,
   },
 ]
 
-export function FunnelStageSection({ onTransitionChange }) {
+export function FunnelStageSection({ onTransitionChange, updatedVisual = false, scrollDriven = true, showBackground = true, designLayout = false }) {
   const sectionRef = useRef(null)
   const sceneRef = useRef(null)
+  const stagesRef = useRef(null)
   const transitionRef = useRef('idle')
   const { elementRef: revealRef, isVisible: isSceneVisible } = useRevealOnVisible({
     threshold: 0.12,
@@ -70,7 +68,12 @@ export function FunnelStageSection({ onTransitionChange }) {
   }, [activeStep, displayedStep])
 
   useEffect(() => {
+    if (!scrollDriven) return undefined
+
+    let frame = 0
+
     function updateStep() {
+      frame = 0
       const section = sectionRef.current
       const scene = sceneRef.current
 
@@ -79,13 +82,22 @@ export function FunnelStageSection({ onTransitionChange }) {
       }
 
       const scrollDistance = section.offsetHeight - scene.offsetHeight
-      const sceneTop = Math.max(0, (window.innerHeight - scene.offsetHeight) / 2)
-      const hasStickyScrollStarted = section.getBoundingClientRect().top <= sceneTop
+      const sceneTop = Number.parseFloat(window.getComputedStyle(scene).top) || 0
+      const sectionTop = section.getBoundingClientRect().top
+      const hasStickyScrollStarted = sectionTop <= sceneTop
       const progress = Math.min(
         1,
-        Math.max(0, scrollDistance > 0 ? (sceneTop - section.getBoundingClientRect().top) / scrollDistance : 0),
+        Math.max(0, scrollDistance > 0 ? (sceneTop - sectionTop) / scrollDistance : 0),
       )
       const nextTransition = progress >= 0.995 ? 'complete' : hasStickyScrollStarted ? 'preview' : 'idle'
+
+      if (designLayout) {
+        const stageProgress = progress * contentSteps.length
+        stagesRef.current?.querySelectorAll('.funnel-stage-section__stage-underline').forEach((line, index) => {
+          const fill = Math.min(1, Math.max(0, stageProgress - index))
+          line.style.setProperty('--funnel-line-progress', String(Math.max(0.04, fill)))
+        })
+      }
 
       setActiveStep(Math.min(contentSteps.length - 1, Math.floor(progress * contentSteps.length)))
       setIsNextPreviewVisible(nextTransition === 'preview')
@@ -96,16 +108,21 @@ export function FunnelStageSection({ onTransitionChange }) {
       }
     }
 
+    function queueUpdate() {
+      if (!frame) frame = window.requestAnimationFrame(updateStep)
+    }
+
     updateStep()
 
-    window.addEventListener('scroll', updateStep, { passive: true })
-    window.addEventListener('resize', updateStep)
+    window.addEventListener('scroll', queueUpdate, { passive: true })
+    window.addEventListener('resize', queueUpdate)
 
     return () => {
-      window.removeEventListener('scroll', updateStep)
-      window.removeEventListener('resize', updateStep)
+      window.removeEventListener('scroll', queueUpdate)
+      window.removeEventListener('resize', queueUpdate)
+      if (frame) window.cancelAnimationFrame(frame)
     }
-  }, [onTransitionChange])
+  }, [designLayout, onTransitionChange, scrollDriven])
 
   return (
     <section className="funnel-stage-section" ref={sectionRef} aria-labelledby="funnel-stage-title">
@@ -116,17 +133,25 @@ export function FunnelStageSection({ onTransitionChange }) {
           revealRef.current = element
         }}
       >
+        {!designLayout && updatedVisual && showBackground && <img className="funnel-stage-section__background" src={updatedFunnelBackground} alt="" aria-hidden="true" />}
+        {!designLayout && updatedVisual && <img className="funnel-stage-section__funnel-export" src={updatedFunnelImage} alt="" aria-hidden="true" />}
+        {designLayout && <div className="funnel-stage-section__design-background" aria-hidden="true"><img src={designBackground} alt="" /></div>}
         <div className={`funnel-stage-section__container funnel-stage-section__container--reveal${isSceneVisible ? ' is-visible' : ''}`}>
           <div className="funnel-stage-section__visual" aria-label="Этапы воронки">
-            <div className="funnel-stage-section__funnel-frame">
-              <img className="funnel-stage-section__funnel" src={funnelImage} alt="" />
-            </div>
-            <ol className="funnel-stage-section__stages">
+            {designLayout && <FunnelDesignArtwork />}
+            {!updatedVisual && <div className="funnel-stage-section__funnel-frame">
+              <img className="funnel-stage-section__funnel" src={lightFunnelImage} alt="" />
+            </div>}
+            <ol className="funnel-stage-section__stages" ref={stagesRef}>
               {stages.map((stage, index) => (
                 <li className={index === activeStep ? 'is-active' : ''} key={stage}>
                   <span className="funnel-stage-section__stage-label">
                     <span>{stage}</span>
-                    {index === activeStep && <span className="funnel-stage-section__stage-underline" aria-hidden="true" />}
+                    {(designLayout || index === activeStep) && (
+                      <span className="funnel-stage-section__stage-underline" aria-hidden="true">
+                        {designLayout && <span className="funnel-stage-section__stage-underline-fill" />}
+                      </span>
+                    )}
                   </span>
                 </li>
               ))}
@@ -135,7 +160,7 @@ export function FunnelStageSection({ onTransitionChange }) {
 
           <div className="funnel-stage-section__content">
             <h1 id="funnel-stage-title">
-              <span className="funnel-stage-section__title-secondary">Работаем</span> на&nbsp;всех этапах воронки
+              Работаем на&nbsp;всех этапах воронки
             </h1>
 
             <div
@@ -148,14 +173,14 @@ export function FunnelStageSection({ onTransitionChange }) {
               </div>
 
               <div className="funnel-stage-section__cases" aria-label="Кейсы клиентов">
-                <img className="funnel-stage-section__cases-image" src={content.casesImage} alt="Кейсы клиентов" />
+                <FunnelCaseCards stage={displayedStep} designLayout={designLayout} />
               </div>
 
               <div className="funnel-stage-section__channels" aria-label="Инструменты рекламы">
                 {content.instruments.map((instrument) => (
                   <span className="funnel-stage-section__chip" key={instrument}>{instrument}</span>
                 ))}
-                <span className="funnel-stage-section__channels-more">ещё 5</span>
+                <span className="funnel-stage-section__channels-more">ещё {displayedStep === 0 ? '4' : '5'}</span>
               </div>
             </div>
 
@@ -165,10 +190,16 @@ export function FunnelStageSection({ onTransitionChange }) {
           </div>
         </div>
 
-        <div className={`funnel-stage-section__next-preview${isNextPreviewVisible ? ' is-visible' : ''}`} aria-hidden="true">
-          <span>Анализируем больше данных —</span>
-          <strong>точнее находим ваших клиентов</strong>
-        </div>
+        {designLayout ? (
+          <div className={`funnel-stage-section__big-data-preview${isNextPreviewVisible ? ' is-visible' : ''}`} aria-hidden="true">
+            <span>тут биг дата</span>
+          </div>
+        ) : (
+          <div className={`funnel-stage-section__next-preview${isNextPreviewVisible ? ' is-visible' : ''}`} aria-hidden="true">
+            <span>Анализируем больше данных —</span>
+            <strong>точнее находим ваших клиентов</strong>
+          </div>
+        )}
       </div>
     </section>
   )

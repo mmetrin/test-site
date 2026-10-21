@@ -1,8 +1,6 @@
 .audience-data-scene {
-  /* Shared timeline: orbit and logos grow together when the flow starts. */
   --flow-start: 0s;
-  --data-artwork-gradient: linear-gradient(101deg, #a8c5e2 8.06%, #386088 30.53%, #244c73 44.52%, #0e2c4a 62.12%, #031220 121.92%);
-  --growth-duration: 5.2s;
+  --data-artwork-gradient: linear-gradient(180deg, #b1d9f7 0%, #a4cff1 52%, #80b2dd 100%);
   position: absolute;
   inset: 0;
   isolation: isolate;
@@ -21,21 +19,21 @@
   width: 363.175px;
   height: 286.16px;
   object-fit: contain;
-  opacity: 0;
+  opacity: 1;
 }
 
 .audience-data-scene__orbit {
   position: absolute;
   z-index: 2;
-  top: -144.3365px;
-  left: -43.28px;
-  /* Preserve the 1271 × 1203 PNG and align its arc with the flow endpoints. */
-  width: 709.56px;
-  height: 671.597px;
+  top: -164.3365px;
+  left: 16.72px;
+  /* Keep the exported orbit's proportions at its final size. */
+  width: 850px;
+  height: auto;
   object-fit: contain;
   transform-origin: center;
-  transform: scale(0.7);
-  opacity: 0;
+  transform: scale(1);
+  opacity: 0.7;
 }
 
 .audience-data-scene__intro-decoration {
@@ -75,34 +73,14 @@
 
 .audience-data-scene__plus span:last-child { transform: rotate(-90deg); }
 
-.audience-segment-section__content--visible .audience-data-scene__label {
-  animation: audience-data-appear 800ms ease both;
-}
-
 .audience-segment-section__content--visible .audience-data-scene__intro-decoration {
   animation: audience-data-intro var(--flow-start) linear both;
-}
-
-.audience-segment-section__content--visible .audience-data-scene__orbit {
-  animation:
-    audience-data-orbit-appear 800ms ease var(--flow-start) forwards,
-    audience-data-orbit-grow var(--growth-duration) linear var(--flow-start) forwards;
-}
-
-@keyframes audience-data-appear {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 
 @keyframes audience-data-intro {
   0%, 20% { opacity: 0; }
   55%, 73% { opacity: 1; }
   100% { opacity: 0; }
-}
-
-@keyframes audience-data-orbit-grow {
-  from { transform: scale(0.7); }
-  to { transform: scale(1); }
 }
 
 @media (min-width: 841px) and (max-width: 1487px) {
@@ -132,9 +110,4 @@
   .audience-data-scene .audience-data-scene__orbit { animation: none; opacity: 1; }
   .audience-data-scene .audience-data-scene__orbit { transform: scale(1); opacity: 0.7; }
   .audience-data-scene .audience-data-scene__intro-decoration { animation: none; display: none; }
-}
-
-@keyframes audience-data-orbit-appear {
-  from { opacity: 0; }
-  to { opacity: 0.7; }
 }

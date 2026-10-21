@@ -11,7 +11,7 @@ export function usePageScrollRestoration() {
     let frame
     let settle
     let restore
-    if (Number.isFinite(savedScrollPosition)) {
+    if (Number.isFinite(savedScrollPosition) && !window.location.hash) {
       // Restore after the first layout and once more after media/assets settle.
       restore = () => window.scrollTo({ top: savedScrollPosition, behavior: 'auto' })
       frame = window.requestAnimationFrame(restore)

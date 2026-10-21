@@ -1,13 +1,16 @@
 import { useState } from 'react'
 
 import { LightRibbonCanvas } from '../../features/light-ribbon'
+import { SiteHeader } from '../../shared/ui/site-header'
 import './TintLabPage.css'
 
 export function TintLabPage() {
   const [renderKey, setRenderKey] = useState(0)
 
   return (
-    <main className="tint-lab">
+    <>
+    <SiteHeader />
+    <main className="tint-lab" id="top">
       <LightRibbonCanvas key={renderKey} />
 
       <header className="tint-lab__header">
@@ -25,5 +28,6 @@ export function TintLabPage() {
         </button>
       </div>
     </main>
+    </>
   )
 }

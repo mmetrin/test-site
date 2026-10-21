@@ -38,8 +38,8 @@
   position: absolute;
   pointer-events: none;
   white-space: pre;
-  color: #369afe;
-  text-shadow: 0 0 8px rgb(54 154 254 / 48%);
+  color: #80b3ff;
+  text-shadow: 0 0 8px rgb(128 179 255 / 48%);
   font: 11px/14px ui-monospace, SFMono-Regular, Consolas, monospace;
   letter-spacing: 2px;
   animation: audience-data-cursor-trail 1.8s ease-out forwards;

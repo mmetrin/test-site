@@ -1,21 +1,22 @@
 import { useState } from 'react'
 
-import { AudienceDataScene } from './AudienceDataScene'
+import bigDataWordmark from '../../assets/figma/big-data-stage/big-data-wordmark.png'
+import { AudienceDataVideo } from './AudienceDataVideo'
 import { useRevealOnVisible } from '../../shared/lib/useRevealOnVisible'
 import { SegmentedControl } from '../../shared/ui/segmented-control/SegmentedControl'
 import './AudienceSegmentSection.css'
 
 const audienceSegments = [
-  { label: 'Крупному и среднему бизнесу', value: 'enterprise' },
-  { label: 'Малому бизнесу', value: 'small-business' },
+  { label: 'Крупному бизнесу', value: 'enterprise' },
+  { label: 'Малому и среднему бизнесу', value: 'small-business' },
   { label: 'Паблишерам', value: 'publishers' },
   { label: 'Блогерам', value: 'bloggers' },
 ]
 
-export function AudienceSegmentTabs({ activeSegment, onChange }) {
+export function AudienceSegmentTabs({ activeSegment, onChange, rubber = false }) {
   return (
     <div className="audience-segment-section__tabs">
-      <SegmentedControl items={audienceSegments} onChange={onChange} value={activeSegment} />
+      <SegmentedControl items={audienceSegments} onChange={onChange} value={activeSegment} rubber={rubber} />
     </div>
   )
 }
@@ -25,7 +26,7 @@ export function AudienceSegmentSection({ activeSegment: controlledSegment, funne
   const activeSegment = controlledSegment ?? internalSegment
   const handleSegmentChange = onSegmentChange ?? setInternalSegment
   const { elementRef: dataContentRef, isVisible: isDataContentVisible } = useRevealOnVisible({
-    threshold: 0.18,
+    threshold: 0.1,
     rootMargin: '0px 0px -8% 0px',
     once: true,
   })
@@ -34,25 +35,30 @@ export function AudienceSegmentSection({ activeSegment: controlledSegment, funne
   const isContentVisible = isFunnelComplete || (!isFunnelPreviewVisible && isDataContentVisible)
 
   return (
-    <section className="audience-segment-section" aria-label="Аудитории MTS Ads">
+    <section className="audience-segment-section" aria-labelledby="audience-data-title">
       {!hideTabs && <AudienceSegmentTabs activeSegment={activeSegment} onChange={handleSegmentChange} />}
 
-      <div className="audience-segment-section__data" aria-labelledby="audience-data-title">
-        <h2
-          className={`audience-segment-section__data-title${isContentVisible ? ' audience-segment-section__data-title--visible' : ''}`}
-          id="audience-data-title"
-        >
-          <span>Анализируем больше данных —</span>
-          <strong>точнее находим ваших клиентов</strong>
-        </h2>
-
-        <div
-          ref={dataContentRef}
-          className={`audience-segment-section__content${isContentVisible ? ' audience-segment-section__content--visible' : ''}`}
-        >
-          <AudienceDataScene isVisible={isContentVisible} />
-          <p className="audience-segment-section__caption audience-segment-section__caption--mts audience-segment-section__reveal audience-segment-section__reveal--caption"><strong>Подберём точную аудиторию среди 65+ млн абонентов МТС</strong> на основе их интересов, интернет-поведения, звонков и гео-данных</p>
-          <p className="audience-segment-section__caption audience-segment-section__caption--partners audience-segment-section__reveal audience-segment-section__reveal--right"><strong>Обогащаем выборку данными от партнёров</strong> — знаем детали о реальных покупках на товары вашей категории или бренд</p>
+      <div
+        ref={dataContentRef}
+        className={`audience-segment-section__stage${isContentVisible ? ' audience-segment-section__stage--visible' : ''}`}
+      >
+        <AudienceDataVideo />
+        <div className="audience-segment-section__content">
+          <img
+            className="audience-segment-section__wordmark"
+            src={bigDataWordmark}
+            alt="BIG DATA МТС"
+            loading="lazy"
+            decoding="async"
+          />
+          <h2 className="audience-segment-section__data-title" id="audience-data-title">
+            <span>Анализируем больше данных —</span>
+            <strong>точнее находим ваших клиентов</strong>
+          </h2>
+          <div className="audience-segment-section__captions">
+            <p>Подберём точную аудиторию среди 65+ млн абонентов МТС на основе их интересов, гео-данных, интернет-поведения и звонков</p>
+            <p>Обогащаем выборку данными от партнёров — знаем детали о реальных покупках на товары вашей категории или бренд</p>
+          </div>
         </div>
       </div>
     </section>

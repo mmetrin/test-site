@@ -8,7 +8,7 @@ const impulses = Array.from({ length: 24 }, (_, index) => ({
   length: 45 + (index % 4) * 22,
   duration: 3.8 + (index % 4) * 0.5,
   delay: (index * 0.87) % 5,
-  color: ['132 157 220', '157 123 196', '120 183 208'][index % 3],
+  color: ['128 179 255', '151 194 255', '103 161 247'][index % 3],
 }))
 
 export function AudienceTransferImpulses() {

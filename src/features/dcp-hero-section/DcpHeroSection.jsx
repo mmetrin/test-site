@@ -41,7 +41,7 @@ const heroSlides = [
 
 function DcpLogo() {
   return (
-    <a className="dcp-hero__logo" href="/mads/" aria-label="МТС Ads">
+    <a className="dcp-hero__logo" href={`${import.meta.env.BASE_URL}enterprise-hero/`} aria-label="МТС Ads — главная">
       <img src={mtsLogo} alt="МТС Ads" />
     </a>
   )
@@ -68,7 +68,7 @@ function DcpHeader() {
   )
 }
 
-export function DcpHeroSection() {
+export function DcpHeroSection({ showHeader = true }) {
   const [visibleSlideIndex, setVisibleSlideIndex] = useState(0)
   const [visibleFrameIndex, setVisibleFrameIndex] = useState(0)
   const [incomingFrame, setIncomingFrame] = useState(null)
@@ -159,7 +159,7 @@ export function DcpHeroSection() {
       </div>
 
       <div className="dcp-hero__inner">
-        <DcpHeader />
+        {showHeader && <DcpHeader />}
 
         <div className="dcp-hero__copy">
           <div className="dcp-hero__heading">

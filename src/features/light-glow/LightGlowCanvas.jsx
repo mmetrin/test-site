@@ -139,6 +139,7 @@ function createShader(context, type, source) {
 
 export function LightGlowCanvas() {
   const canvasRef = useRef(null)
+  const overlayRef = useRef(null)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -171,6 +172,7 @@ export function LightGlowCanvas() {
     const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
     let animationFrameId = 0
     let previousFrameTime = 0
+    let isVisible = false
     const startTime = window.performance.now()
 
     context.useProgram(program)
@@ -204,34 +206,74 @@ export function LightGlowCanvas() {
     }
 
     function render(currentTime) {
-      animationFrameId = window.requestAnimationFrame(render)
+      animationFrameId = 0
 
-      if (document.hidden || currentTime - previousFrameTime < FRAME_INTERVAL) {
+      if (!isVisible || document.hidden || reducedMotionQuery.matches) {
         return
       }
 
-      previousFrameTime = currentTime
-      draw(currentTime)
+      if (currentTime - previousFrameTime >= FRAME_INTERVAL) {
+        previousFrameTime = currentTime
+        draw(currentTime)
+      }
+
+      animationFrameId = window.requestAnimationFrame(render)
     }
 
-    const resizeObserver = new ResizeObserver(() => draw(window.performance.now()))
-    const handleVisibilityChange = () => {
-      if (!document.hidden) {
+    function stopAnimation() {
+      if (animationFrameId) {
+        window.cancelAnimationFrame(animationFrameId)
+        animationFrameId = 0
+      }
+    }
+
+    function startAnimation() {
+      if (!isVisible || document.hidden) {
+        return
+      }
+
+      const currentTime = window.performance.now()
+      draw(reducedMotionQuery.matches ? startTime + 2500 : currentTime)
+      previousFrameTime = currentTime
+
+      if (!reducedMotionQuery.matches && !animationFrameId) {
+        animationFrameId = window.requestAnimationFrame(render)
+      }
+    }
+
+    const resizeObserver = new ResizeObserver(() => {
+      if (isVisible) {
         draw(window.performance.now())
+      }
+    })
+    const intersectionObserver = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting
+      overlayRef.current?.style.setProperty('animation-play-state', isVisible ? 'running' : 'paused')
+
+      if (isVisible) {
+        startAnimation()
+      } else {
+        stopAnimation()
+      }
+    }, { rootMargin: '160px 0px' })
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        overlayRef.current?.style.setProperty('animation-play-state', 'paused')
+        stopAnimation()
+      } else {
+        overlayRef.current?.style.setProperty('animation-play-state', isVisible ? 'running' : 'paused')
+        startAnimation()
       }
     }
 
     resizeObserver.observe(canvas)
+    intersectionObserver.observe(canvas)
     document.addEventListener('visibilitychange', handleVisibilityChange)
-    draw(reducedMotionQuery.matches ? startTime + 2500 : startTime)
-
-    if (!reducedMotionQuery.matches) {
-      animationFrameId = window.requestAnimationFrame(render)
-    }
 
     return () => {
-      window.cancelAnimationFrame(animationFrameId)
+      stopAnimation()
       resizeObserver.disconnect()
+      intersectionObserver.disconnect()
       document.removeEventListener('visibilitychange', handleVisibilityChange)
       context.deleteBuffer(buffer)
       context.deleteProgram(program)
@@ -243,7 +285,7 @@ export function LightGlowCanvas() {
   return (
     <>
       <canvas className="light-glow-canvas" ref={canvasRef} aria-hidden="true" />
-      <div className="light-glow-overlay" aria-hidden="true" />
+      <div className="light-glow-overlay" ref={overlayRef} aria-hidden="true" />
     </>
   )
 }

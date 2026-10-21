@@ -6,7 +6,8 @@ import { LeadCaptureSection } from '../../features/lead-capture'
 import { PremiumVideoTransition } from '../../features/premium-video-transition'
 import { usePageReady } from '../../shared/lib/usePageReady'
 import { useScrollReveal } from '../../shared/lib/useScrollReveal'
-import { PageLoader } from '../../shared/ui/page-loader'
+import { SiteHeader } from '../../shared/ui/site-header'
+import { SiteFooter } from '../../shared/ui/site-sections'
 import './PremiumVideoPage.css'
 
 const LEAD_FORM_SCROLL_OFFSET = 200
@@ -60,7 +61,7 @@ function animateScrollToElement(element, offset, duration) {
 }
 
 export function PremiumVideoPage() {
-  const isReady = usePageReady()
+  const isReady = usePageReady(100)
 
   useScrollReveal()
 
@@ -99,12 +100,15 @@ export function PremiumVideoPage() {
   }, [])
 
   return (
-    <main className={`premium-video-page${isReady ? ' premium-video-page--ready' : ''}`}>
-      <PageLoader isHidden={isReady} />
+    <>
+    <SiteHeader />
+    <main className={`premium-video-page${isReady ? ' premium-video-page--ready' : ''}`} id="top">
       <HeroSection />
       <AdvantagesSection />
       <PremiumVideoTransition />
       <LeadCaptureSection />
+      <SiteFooter />
     </main>
+    </>
   )
 }

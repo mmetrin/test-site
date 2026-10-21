@@ -4,7 +4,7 @@
   inset: 0;
   mask-image: linear-gradient(to bottom, transparent, #000 95px, #000 245px, transparent 365px);
   pointer-events: none;
-  opacity: 0;
+  opacity: 1;
 }
 
 .audience-transfer-impulses__particle {
@@ -13,7 +13,7 @@
   height: 1px;
   transform-origin: left center;
   opacity: 0;
-  background: linear-gradient(90deg, rgb(var(--impulse-color) / 85%), rgb(var(--impulse-color) / 28%) 35%, transparent);
+  background: linear-gradient(90deg, rgb(var(--impulse-color) / 100%), rgb(var(--impulse-color) / 42%) 35%, transparent);
 }
 
 .audience-transfer-impulses__particle::before {
@@ -24,7 +24,7 @@
   width: 1.5px;
   height: 1.5px;
   border-radius: 50%;
-  background: #d5e3f0;
+  background: #b8d5ff;
   box-shadow: 0 0 2px rgb(var(--impulse-color) / 25%);
 }
 
@@ -34,12 +34,8 @@
   left: -1px;
   width: 3.5px;
   height: 3.5px;
-  background: radial-gradient(circle at 35% 30%, #c0e7ff, #58b7ff 48%, #2789e3);
-  box-shadow: 0 0 5px rgb(65 163 255 / 55%);
-}
-
-.audience-segment-section__content--visible .audience-transfer-impulses {
-  animation: audience-data-appear 1600ms ease var(--flow-start) forwards;
+  background: radial-gradient(circle at 35% 30%, #d9e9ff, #80b3ff 48%, #679ff2);
+  box-shadow: 0 0 5px rgb(128 179 255 / 55%);
 }
 
 .audience-segment-section__content--visible .audience-transfer-impulses__particle {
@@ -48,8 +44,8 @@
 
 @keyframes audience-transfer-impulse {
   0% { transform: translateX(0); opacity: 0; }
-  28% { opacity: 0.35; }
-  65% { opacity: 0.2; }
+  28% { opacity: 0.5; }
+  65% { opacity: 0.3; }
   100% { transform: translateX(-160px); opacity: 0; }
 }
 

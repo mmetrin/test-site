@@ -183,7 +183,7 @@ export function DcpServiceModeSection() {
             })}
           </div>
 
-          <div className="dcp-service-mode__copy" role="tabpanel">
+          <div className="dcp-service-mode__copy" role="tabpanel" key={activeMode.id}>
             <div className="dcp-service-mode__text">
               <h3>{activeMode.title}</h3>
               <p>

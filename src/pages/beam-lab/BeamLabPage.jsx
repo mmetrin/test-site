@@ -1,8 +1,11 @@
+import { SiteHeader } from '../../shared/ui/site-header'
 import './BeamLabPage.css'
 
 export function BeamLabPage() {
   return (
-    <main className="beam-lab">
+    <>
+    <SiteHeader />
+    <main className="beam-lab" id="top">
       <div className="beam-lab__ambient" aria-hidden="true" />
       <div className="beam-lab__light" aria-hidden="true">
         <div className="beam-lab__volume" />
@@ -11,5 +14,6 @@ export function BeamLabPage() {
       </div>
       <div className="beam-lab__grain" aria-hidden="true" />
     </main>
+    </>
   )
 }
